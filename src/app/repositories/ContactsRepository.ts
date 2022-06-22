@@ -7,14 +7,14 @@ let contacts: TContacts[] = [
     name: 'Tainan',
     email: 'tainan@email.com',
     phone: '91984417318',
-    category: v4(),
+    category_id: v4(),
   },
   {
     id: v4(),
     name: 'Nick',
     email: 'nick@email.com',
     phone: '91984417318',
-    category: v4(),
+    category_id: v4(),
   },
 ]
 
@@ -30,10 +30,25 @@ class ContactsRepository {
     })
   }
 
+  findByEmail(email: string): Promise<TContacts> {
+    return new Promise(resolve => {
+      const contact = contacts.find(contact => contact.email === email)
+      resolve(contact!)
+    })
+  }
+
   delete(id: string): Promise<boolean> {
     return new Promise(resolve => {
       contacts = contacts.filter(contact => contact.id !== id)
       resolve(true)
+    })
+  }
+
+  create({email, phone, name, category_id}: Omit<TContacts, 'id'>) {
+    return new Promise(resolve => {
+      const newContact = {id: v4(), email, phone, name, category_id}
+      contacts.push(newContact)
+      resolve(newContact)
     })
   }
 }

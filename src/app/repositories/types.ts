@@ -3,5 +3,5 @@ export type TContacts = {
   name: string
   email: string
   phone: string
-  category: string
+  category_id: string
 }
