@@ -51,6 +51,16 @@ class ContactsRepository {
       resolve(newContact)
     })
   }
+
+  update(id: string, {email, phone, name, category_id}: Omit<TContacts, 'id'>) {
+    return new Promise(resolve => {
+      const updatedContact = {id, email, phone, name, category_id}
+      contacts = contacts.map(contact =>
+        contact.id === id ? updatedContact : contact,
+      )
+      resolve(updatedContact)
+    })
+  }
 }
 
 export default new ContactsRepository()
