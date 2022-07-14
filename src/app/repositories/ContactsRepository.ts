@@ -1,4 +1,6 @@
 import {v4} from 'uuid'
+import db from '../../database'
+
 import {TContacts} from './types'
 
 let contacts: TContacts[] = [
@@ -19,15 +21,16 @@ let contacts: TContacts[] = [
 ]
 
 class ContactsRepository {
-  findAll(): Promise<TContacts[]> {
-    return new Promise(resolve => resolve(contacts))
+  async findAll(): Promise<TContacts[]> {
+    const rows: TContacts[] = await db.query('SELECT * FROM contacts')
+
+    return rows
   }
 
-  findById(id: string): Promise<TContacts> {
-    return new Promise(resolve => {
-      const contact = contacts.find(contact => contact.id === id)
-      resolve(contact!)
-    })
+  async findById(id: string): Promise<TContacts> {
+    const [row] = await db.query('SELECT * FROM contacts WHERE id = $1', [id])
+
+    return row
   }
 
   findByEmail(email: string): Promise<TContacts> {
@@ -37,19 +40,24 @@ class ContactsRepository {
     })
   }
 
-  delete(id: string): Promise<boolean> {
-    return new Promise(resolve => {
-      contacts = contacts.filter(contact => contact.id !== id)
-      resolve(true)
-    })
+  async delete(id: string): Promise<boolean> {
+    await db.query('DELETE FROM contacts WHERE id = $1', [id])
+
+    return true
   }
 
-  create({email, phone, name, category_id}: Omit<TContacts, 'id'>) {
-    return new Promise(resolve => {
-      const newContact = {id: v4(), email, phone, name, category_id}
-      contacts.push(newContact)
-      resolve(newContact)
-    })
+  async create({email, phone, name, category_id}: Omit<TContacts, 'id'>) {
+    const [row] = await db.query(
+      `INSERT INTO contacts(
+      name,
+      email,
+      phone,
+      category_id
+    ) VALUES($1, $2, $3, $4) RETURNING *`,
+      [name, email, phone, category_id],
+    )
+
+    return row
   }
 
   update(id: string, {email, phone, name, category_id}: Omit<TContacts, 'id'>) {
