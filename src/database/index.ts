@@ -8,12 +8,24 @@ const client = new Client({
   database: 'mycontacts',
 })
 
-client.connect()
+const initConnection = async () => {
+  try {
+    await client.connect()
+  } catch (error) {
+    console.log(error)
+  }
+}
 
-const query = async (query: string) => {
-  const {rows} = await client.query(query)
+initConnection()
+
+const query = async (query: string, values?: any[]) => {
+  const {rows} = await client.query(query, values)
 
   return rows
 }
 
-export {query}
+const db = {
+  query,
+}
+
+export default db
