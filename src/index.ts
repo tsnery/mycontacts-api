@@ -7,4 +7,6 @@ const app = express()
 app.use(parser.json())
 app.use(router)
 
-app.listen(3001, () => console.log('Server started at http://localhost:3001'))
+app.listen(3001, '127.0.0.1', () =>
+  console.log('Server started at http://localhost:3001'),
+)
