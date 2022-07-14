@@ -9,3 +9,11 @@ const client = new Client({
 })
 
 client.connect()
+
+const query = async (query: string) => {
+  const {rows} = await client.query(query)
+
+  return rows
+}
+
+export {query}
