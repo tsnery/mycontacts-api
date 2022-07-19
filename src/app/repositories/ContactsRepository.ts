@@ -33,11 +33,12 @@ class ContactsRepository {
     return row
   }
 
-  findByEmail(email: string): Promise<TContacts> {
-    return new Promise(resolve => {
-      const contact = contacts.find(contact => contact.email === email)
-      resolve(contact!)
-    })
+  async findByEmail(email: string): Promise<TContacts> {
+    const [row] = await db.query('SELECT * FROM contacts WHERE email = $1', [
+      email,
+    ])
+
+    return row
   }
 
   async delete(id: string): Promise<boolean> {
