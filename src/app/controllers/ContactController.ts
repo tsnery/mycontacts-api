@@ -2,11 +2,17 @@ import {Request, Response} from 'express'
 import ContactsRepository from '../repositories/ContactsRepository'
 
 class ContactController {
-  async index(request: Request, response: Response) {
-    const contacts = await ContactsRepository.findAll()
+  async index(
+    request: Request<{}, {}, {}, {orderBy: 'ASC' | 'DESC'}>,
+    response: Response,
+  ) {
+    const {orderBy} = request.query
+
+    const contacts = await ContactsRepository.findAll(orderBy)
 
     return response.json(contacts)
   }
+
   async show(request: Request, response: Response) {
     const {id} = request.params
     const contacts = await ContactsRepository.findById(id)

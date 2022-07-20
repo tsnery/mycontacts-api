@@ -21,8 +21,12 @@ let contacts: TContacts[] = [
 ]
 
 class ContactsRepository {
-  async findAll(): Promise<TContacts[]> {
-    const rows: TContacts[] = await db.query('SELECT * FROM contacts')
+  async findAll(orderBy: 'ASC' | 'DESC' = 'ASC'): Promise<TContacts[]> {
+    const direction = orderBy.toUpperCase() === 'DESC' ? 'DESC' : 'ASC'
+
+    const rows: TContacts[] = await db.query(
+      `SELECT * FROM contacts ORDER BY name ${direction}`,
+    )
 
     return rows
   }
