@@ -65,14 +65,21 @@ class ContactsRepository {
     return row
   }
 
-  update(id: string, {email, phone, name, category_id}: Omit<TContacts, 'id'>) {
-    return new Promise(resolve => {
-      const updatedContact = {id, email, phone, name, category_id}
-      contacts = contacts.map(contact =>
-        contact.id === id ? updatedContact : contact,
-      )
-      resolve(updatedContact)
-    })
+  async update(
+    id: string,
+    {email, phone, name, category_id}: Omit<TContacts, 'id'>,
+  ) {
+    const [row] = await db.query(
+      `
+      UPDATE contacts
+      SET name = $1, email = $2, phone = $3, category_id = $4
+      WHERE id = $5
+      RETURNING *
+    `,
+      [name, email, phone, category_id, id],
+    )
+
+    return row
   }
 }
 
