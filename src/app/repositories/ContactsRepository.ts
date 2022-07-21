@@ -1,24 +1,6 @@
-import {v4} from 'uuid'
 import db from '../../database'
 
 import {TContacts} from './types'
-
-let contacts: TContacts[] = [
-  {
-    id: v4(),
-    name: 'Tainan',
-    email: 'tainan@email.com',
-    phone: '91984417318',
-    category_id: v4(),
-  },
-  {
-    id: v4(),
-    name: 'Nick',
-    email: 'nick@email.com',
-    phone: '91984417318',
-    category_id: v4(),
-  },
-]
 
 class ContactsRepository {
   async findAll(orderBy: 'ASC' | 'DESC' = 'ASC'): Promise<TContacts[]> {

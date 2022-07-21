@@ -5,3 +5,12 @@ export type TContacts = {
   phone: string
   category_id: string
 }
+
+export type TCreateCategoryProps = {
+  name: string
+}
+
+export type TCategory = {
+  id: string
+  name: string
+}
